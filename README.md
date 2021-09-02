@@ -52,7 +52,7 @@
 * `YT Play`
 
 ### Grup
-* `Hidetag
+* `Hidetag`
 * `Listadmin`
 * `Tagall`
 
