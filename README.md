@@ -70,4 +70,4 @@
 
 # Special Thanks To :
 * [`Baileys`](https://github.com/adiwajshing/Baileys)
-* [`SeazycX`]
+* [`SeazycX`](https://github.com/Seazyc)
