@@ -3,8 +3,8 @@
 > pkg update && pkg upgrade
 > pkg install git -y
 > pkg install nodejs -y
-> git clone https://github.com/adulalhy/SZBase.git
-> cd SZBase
+> git clone https://github.com/adulalhy/SZ-SELF.git
+> cd SZ-SELF
 > npm i
 > node run
 > scan QR and Enjoyy
@@ -13,8 +13,8 @@
 ## Cara Install Di Windows
 * [`Download Node JS`](https://nodejs.org/en/download/)
 ```cmd
-> git clone https://github.com/adulalhy/SZBase.git
-> cd SZBase
+> git clone https://github.com/adulalhy/SZ-SELF.git
+> cd SZ-SELF
 > npm i
 > node run
 > scan QR and Enjoyy
