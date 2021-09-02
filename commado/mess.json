@@ -1,0 +1,10 @@
+{
+    "wait": "*Tunggu sebentar*",
+    "error": {
+        "Iv": "Link yang kamu berikan tidak valid",
+        "api": "Maaf terjadi kesalahan"
+    },
+    "OnlyGrup": "Perintah ini hanya bisa digunakan di grup",
+    "GrupAdmin": "Perintah ini hanya bisa digunakan oleh Admin Grup",
+    "BotAdmin": "Bot Harus menjadi admin"
+}
