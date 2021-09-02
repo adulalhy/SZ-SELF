@@ -1,6 +1,7 @@
 const help = (f) => {
-	return `┏━━⬣ 𝙎𝙀𝙇𝙁 𝘽𝙊𝙏
-┃++[OWNER]++
+	return `𝙎𝙀𝙇𝙁 𝘽𝙊𝙏
+┏━━⬣ 𝙊𝙒𝙉𝙀𝙍
+┃
 ┃> [eval]
 ┃${f}term [code]
 ┃${f}upswteks
@@ -14,8 +15,10 @@ const help = (f) => {
 ┃${f}clearall
 ┃${f}setpp
 ┃${f}leave
+┗⬣
+
+┏━━⬣ 𝙊𝙏𝙃𝙀𝙍
 ┃
-┃++[OTHER]++
 ┃${f}tomp4
 ┃${f}sherelock
 ┃${f}detikvideo
