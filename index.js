@@ -711,7 +711,12 @@ require('./lib/fetcher.js').createExif(satu, dua)
 require('./lib/fetcher.js').modStick(media, conn, mek, from)
 break
 
-
+case 'sc':
+case 'source':
+case 'script':
+case 'sourcecode':
+reply(`Sorce code : https://github.com/adulalhy/SZBase`)
+break 
 
 
 
