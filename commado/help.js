@@ -78,7 +78,7 @@ const help = (f) => {
 ┃${f}nolep
 ┃${f}jahat
 ┃${f}baik
-┗⬣
+┗⬣`
 }
 
 exports.help = help
