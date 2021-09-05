@@ -61,6 +61,23 @@
 * `Detikvn`
 * `Detikvideo`
 
+### fun
+* `readmore`
+* `jadian`
+* `ganteng`
+* `beban`
+* `cantik`
+* `jelek`
+* `nganggur`
+* `hebat`
+* `wibu`
+* `pakboy`
+* `pakgirl`
+* `sange`
+* `nolep`
+* `jahat`
+* `baik`
+
 
 
 ## Note:
