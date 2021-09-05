@@ -42,9 +42,10 @@
 * `Broadcast`
 * `Leave`
 * `Take`
-* `q`
 * `Get`
 * `Setnama`
+
+### Sticker Cmd
 * `Setcmd`
 * `Delcmd`
 * `Listcmd`
