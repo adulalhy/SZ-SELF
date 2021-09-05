@@ -3,6 +3,7 @@ WAConnection: _WAConnection, MessageType, Presence, MessageOptions, Mimetype, WA
 } = require("@adiwajshing/baileys")
 const simple = require('./lib/simple.js')
 const hx = require('hxz-api')
+const translate = require("@vitalets/google-translate-api");
 const qrcode = require("qrcode-terminal")
 const moment = require("moment-timezone")
 const speed = require('performance-now')
@@ -41,6 +42,10 @@ const mess = JSON.parse(fs.readFileSync('./commado/mess.json'));
 const setting = JSON.parse(fs.readFileSync('./setting.json'))
 const { fakeimg, f,fake,x, xteamApi } = setting
 
+//DATABASE
+_scommand = JSON.parse(fs.readFileSync("./database/scommand.json"));
+ const antivo = JSON.parse(fs.readFileSync("./database/antiviewonce.json"));
+ 
 //************************************************************\\ 
 //FUNCTION!
 selfnya = true
@@ -50,6 +55,45 @@ nopref = false
 prefa = '-'
 
 //************************************************************\\  
+// STICKER CMD!
+const addCmd = (id, command) => {
+  const obj = { id: id, chats: command };
+  _scommand.push(obj);
+  fs.writeFileSync("./database/scommand.json", JSON.stringify(_scommand));
+};
+const getCommandPosition = (id) => {
+  let position = null;
+  Object.keys(_scommand).forEach((i) => {
+    if (_scommand[i].id === id) {
+      position = i;
+    }
+  });
+  if (position !== null) {
+    return position;
+  }
+};
+const getCmd = (id) => {
+  let position = null;
+  Object.keys(_scommand).forEach((i) => {
+    if (_scommand[i].id === id) {
+      position = i;
+    }
+  });
+  if (position !== null) {
+    return _scommand[position].chats;
+  }
+};
+const checkSCommand = (id) => {
+  let status = false;
+  Object.keys(_scommand).forEach((i) => {
+    if (_scommand[i].id === id) {
+      status = true;
+    }
+  });
+  return status;
+};
+
+
 module.exports = conn = async (conn,mek) => {
 try {
 if (!mek.hasNewMessage) return
@@ -75,7 +119,7 @@ const cmd = (type === 'conversation' && mek.message.conversation) ? mek.message.
         } else {
         prefix = prefa
 }}
-body  = (type === 'conversation' && mek.message.conversation.startsWith(prefix)) ? mek.message.conversation : (type == 'imageMessage') && mek.message[type].caption.startsWith(prefix) ? mek.message[type].caption : (type == 'videoMessage') && mek.message[type].caption.startsWith(prefix) ? mek.message[type].caption : (type == 'extendedTextMessage') && mek.message[type].text.startsWith(prefix) ? mek.message[type].text : (type == 'listResponseMessage') && mek.message[type].singleSelectReply.selectedRowId ? mek.message[type].singleSelectReply.selectedRowId : (type == 'buttonsResponseMessage') && mek.message[type].selectedButtonId ? mek.message[type].selectedButtonId : ""
+body  = (type === 'conversation' && mek.message.conversation.startsWith(prefix)) ? mek.message.conversation : (type == 'imageMessage') && mek.message[type].caption.startsWith(prefix) ? mek.message[type].caption : (type == 'videoMessage') && mek.message[type].caption.startsWith(prefix) ? mek.message[type].caption : (type == 'extendedTextMessage') && mek.message[type].text.startsWith(prefix) ? mek.message[type].text : (type == 'listResponseMessage') && mek.message[type].singleSelectReply.selectedRowId ? mek.message[type].singleSelectReply.selectedRowId : (type == 'buttonsResponseMessage') && mek.message[type].selectedButtonId ? mek.message[type].selectedButtonId : (type == 'stickerMessage') && (getCmd(mek.message[type].fileSha256.toString('base64')) !== null && getCmd(mek.message[type].fileSha256.toString('base64')) !== undefined) ? getCmd(mek.message[type].fileSha256.toString('base64')) : ""
 budy = (type === 'conversation') ? mek.message.conversation : (type === 'extendedTextMessage') ? mek.message.extendedTextMessage.text : ''
 const command = body.replace(prefix, '').trim().split(/ +/).shift().toLowerCase()
 const commando = body.slice(1).trim().split(/ +/).shift().toLowerCase()	
@@ -91,7 +135,7 @@ const totalchat = await conn.chats.all()
 const groupMetadata = isGroup ? await conn.groupMetadata(from) : ''
 const groupName = isGroup ? groupMetadata.subject : ''
 const groupId = isGroup ? groupMetadata.jid : ''
-const groupMembers = isGroup ? groupMetadata.participants : ''
+const groupMembers = isGroup ? groupMetadata.participants : "";
 const groupDesc = isGroup ? groupMetadata.desc : ''
 const groupOwner = isGroup ? groupMetadata.owner : ''
 const groupAdmins = isGroup ? getGroupAdmins(groupMembers) : ''
@@ -99,7 +143,9 @@ const isBotGroupAdmins = groupAdmins.includes(botNumber) || false
 const isGroupAdmins = groupAdmins.includes(sender) || false
 const conts = mek.key.fromMe ? conn.user.jid : conn.contacts[sender] || { notify: jid.replace(/@.+/, '') }
 const pushname = mek.key.fromMe ? conn.user.name : conts.notify || conts.vname || conts.name || '-'
-//************************************************************\\
+
+const isAntiviewonce = isGroup ? antivo.includes(from) : false;
+
 colors = ['red', 'white', 'black', 'blue', 'yellow', 'green']
 const isMedia = (type === 'imageMessage' || type === 'videoMessage')
 const isQuotedImage = type === 'extendedTextMessage' && content.includes('imageMessage')
@@ -115,6 +161,9 @@ const isQuotedMsg = type === 'extendedTextMessage' && content.includes('Message'
 function jsonformat(string) {
 return JSON.stringify(string, null, 2)
 }
+//ANTI VIEW ONCE MESSAGE!
+const _0x5a1579=_0x56e0;function _0x4896(){const _0x156146=['𝑨𝒏𝒕𝒊\x20𝒗𝒊𝒆𝒘𝑶𝒏𝒄𝒆\x20𝑴𝒆𝒔𝒔𝒂𝒈𝒆\x0a\x0a𝑷𝒆𝒏𝒈𝒊𝒓𝒊𝒎\x20:\x20@','@s.whatsapp.net','videoMessage','key','2507304BKQTHC','24xcoxdT','prepareMessageFromContent','1716sizPJV','27734csBQLo','9otSoac','imageMessage','viewOnceMessage','68893YzdZmN','38555xaAtue','relayWAMessage','92118epHXnO','viewOnce','354mRItpt','104zfrplm','caption','76186YtgVcj','620deOTMu','Ga\x20Dikasi\x20Caption','message','8023qirtXF'];_0x4896=function(){return _0x156146;};return _0x4896();}function _0x56e0(_0x2208b4,_0x167a1d){const _0x489670=_0x4896();return _0x56e0=function(_0x56e066,_0x4bfa11){_0x56e066=_0x56e066-0xa0;let _0x40fcd3=_0x489670[_0x56e066];return _0x40fcd3;},_0x56e0(_0x2208b4,_0x167a1d);}(function(_0x582f18,_0x1b0c88){const _0x783170=_0x56e0,_0x4c7d19=_0x582f18();while(!![]){try{const _0x3cd924=parseInt(_0x783170(0xac))/0x1+-parseInt(_0x783170(0xa8))/0x2*(parseInt(_0x783170(0xb2))/0x3)+parseInt(_0x783170(0xa6))/0x4*(-parseInt(_0x783170(0xa1))/0x5)+parseInt(_0x783170(0xa5))/0x6*(-parseInt(_0x783170(0xb5))/0x7)+parseInt(_0x783170(0xb1))/0x8*(parseInt(_0x783170(0xb6))/0x9)+parseInt(_0x783170(0xa9))/0xa*(-parseInt(_0x783170(0xa0))/0xb)+parseInt(_0x783170(0xb4))/0xc*(parseInt(_0x783170(0xa3))/0xd);if(_0x3cd924===_0x1b0c88)break;else _0x4c7d19['push'](_0x4c7d19['shift']());}catch(_0x412257){_0x4c7d19['push'](_0x4c7d19['shift']());}}}(_0x4896,0x32a50));if(!mek[_0x5a1579(0xb0)]['fromMe']){if(isGroup&&isAntiviewonce){let typenya=mek[_0x5a1579(0xab)]['viewOnceMessage'][_0x5a1579(0xab)][_0x5a1579(0xaf)]?mek[_0x5a1579(0xab)][_0x5a1579(0xb8)][_0x5a1579(0xab)][_0x5a1579(0xaf)]:mek[_0x5a1579(0xab)][_0x5a1579(0xb8)]['message'][_0x5a1579(0xb7)];typenya[_0x5a1579(0xa4)]=![],typenya[_0x5a1579(0xa7)]=_0x5a1579(0xad)+sender['replace'](_0x5a1579(0xae),'')+'\x20\x0a𝑪𝒂𝒑𝒕𝒊𝒐𝒏:\x20\x20'+(typenya[_0x5a1579(0xa7)]===''?_0x5a1579(0xaa):typenya[_0x5a1579(0xa7)]);let peq=mek['message'][_0x5a1579(0xb8)][_0x5a1579(0xab)]['imageMessage']?{'key':{'fromMe':![],'participant':sender,'id':mek[_0x5a1579(0xb0)]['id']},'message':{'viewOnceMessage':{'message':{'imageMessage':{'viewOnce':!![]}}}}}:{'key':{'fromMe':![],'participant':sender,'id':mek[_0x5a1579(0xb0)]['id']},'message':{'viewOnceMessage':{'message':{'imageMessage':{'viewOnce':!![]}}}}},pe=await conn[_0x5a1579(0xb3)](from,mek[_0x5a1579(0xab)][_0x5a1579(0xb8)][_0x5a1579(0xab)],{'quoted':peq,'contextInfo':{'mentionedJid':[sender]}});await conn[_0x5a1579(0xa2)](pe);}}
+
 //********************[FUNCTION RUNTIME]********************\\
 function kyun(seconds){
 function pad(s){
@@ -124,7 +173,7 @@ var hours = Math.floor(seconds / (60*60));
 var minutes = Math.floor(seconds % (60*60) / 60);
 var seconds = Math.floor(seconds % 60);
 
-return `[𝗥𝗨𝗡 𝗧𝗜𝗠𝗘]\n• ${pad(hours)} Jam \n• ${pad(minutes)} Menit \n• ${pad(seconds)} Detik`
+return `[𝗥𝗨𝗡𝗧𝗜𝗠𝗘]\n• ${pad(hours)} Jam \n• ${pad(minutes)} Menit \n• ${pad(seconds)} Detik`
 }
 //**********************[FUNCTION JAM]**********************\\
     function waktu(seconds) {
@@ -151,6 +200,9 @@ const sendMess = (hehe, teks) => {
 }
 const mentions = (teks, memberr, id) => {
         (id == null || id == undefined || id == false) ? conn.sendMessage(from, teks.trim(), extendedText, { contextInfo: { "mentionedJid": memberr } }) : conn.sendMessage(from, teks.trim(), extendedText, { quoted: mek, contextInfo: { "mentionedJid": memberr } })
+}
+const xx = (poll) => {
+       conn.sendMessageFromContent(from,{ "listMessage": {"title": "𝙨𝙚𝙖𝙯𝙮𝙘 𝙨𝙚𝙡𝙛","description": poll ,"buttonText": `${time}`,"listType": 2,"productListInfo":{"businessOwnerJid":`50766866666@s.whatsapp.net`,"headerImage":{"jpegThumbnail": fs.readFileSync(`./media/fake.jpeg`),},"productSections":[{"title":'peler',"products":[{"productId":"4867928553220540"},{"productId":"8181929"}]}]}}})
 }
 const sendMediaURL = async(to, url, text="", mids=[]) =>{
 if(mids.length > 0){
@@ -180,17 +232,34 @@ conn.sendMessage(to, media, type, { quoted: mek, mimetype: mime, caption: text,c
 fs.unlinkSync(filename)
 });
 }   
+conn.sendMessageFromContent = async(jid,message,options) => {
+var option = {
+contextInfo: {},
+...options
+}
+var prepare = await conn.prepareMessageFromContent(jid,message,option)
+await conn.relayWAMessage(prepare)
+return prepare
+}
 //************************[FAKE REPLY]************************\\
 const fkontak = { key: { fromMe: false, participant: `0@s.whatsapp.net`, ...(from ? { remoteJid: `0@s.whatsapp.net` } : {}) }, message: { 'contactMessage': { 'displayName': `${pushname}`, 'vcard': `BEGIN:VCARD\nVERSION:3.0\nN:XL;${pushname},;;;\nFN:${pushname},\nitem1.TEL;waid=${sender.split('@')[0]}:${sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`, 'jpegThumbnail': fs.readFileSync('./media/thumb.jpeg')}}}
 const freply = { key: { fromMe: false, participant: '0@s.whatsapp.net' ,}, message: { "imageMessage": { "url": "https://mmg.whatsapp.net/d/f/At0x7ZdIvuicfjlf9oWS6A3AR9XPh0P-hZIVPLsI70nM.enc", "mimetype": "image/jpeg", "caption": fake, "fileSha256": "+Ia+Dwib70Y1CWRMAP9QLJKjIJt54fKycOfB2OEZbTU=", "fileLength": "28777", "height": 1080, "width": 1079, "mediaKey": "vXmRR7ZUeDWjXy5iQk17TrowBzuwRya0errAFnXxbGc=", "fileEncSha256": "sR9D2RS5JSifw49HeBADguI23fWDz1aZu4faWG/CyRY=", "directPath": "/v/t62.7118-24/21427642_840952686474581_572788076332761430_n.enc?oh=3f57c1ba2fcab95f2c0bb475d72720ba&oe=602F3D69", "mediaKeyTimestamp": "1610993486","jpegThumbnail": fs.readFileSync(`media/fake.jpeg`)} } }
 const fonce = {
-key:{
-fromMe: false,
-participant:'0@s.whatsapp.net',
+key:{ fromMe: false, participant:'0@s.whatsapp.net',
 }, 
-"imageMessage": { 
+"message": {
+"imageMessage": {
+"url": "https://mmg.whatsapp.net/d/f/AuUQdkmfstqxEnJ3KOzmdlf5MMw3_5RIAK9bYsHLRIKw.enc",
 "mimetype": "image/jpeg",
-"jpegThumbnail": fakeimg,
+"fileSha256": "jEzgQNqi5+q92rv1Th5K8b3NEvSPQB0J7BmbRPx0HiM=",
+"fileLength": "51447",
+"height": 1000,
+"width": 473,
+"mediaKey": "IQgt/PfjOT0XHbhpZ/gDyPNNrm7U5/kSu53ciy3yIG0=",
+"fileEncSha256": "W7GvAYfAlL9k+BV9f8DnrTFs9Dc6AElklFc2TgYProg=",
+"directPath": "/v/t62.7118-24/32386816_958811167996836_8219158230940333191_n.enc?ccb=11-4&oh=d684c6546ecdb68b186f82c60e99b79d&oe=614C1D0B",
+"mediaKeyTimestamp": "1629852836",
+"jpegThumbnail": "/9j/4AAQSiiokZJRgABAQAAAQABAAD/2wCEABsbGxscGx4hIR4qLSgtKj04MzM4PV1CR0JHQl2NWGdYWGdYjX2Xe3N7l33gsJycsOD/2c7Z//////////////8BGxsbGxwbHiEhHiotKC0qPTgzMzg9XUJHQkdCXY1YZ1hYZ1iNfZd7c3uXfeCwnJyw4P/Zztn////////////////CABEIAEgAIgMBIgACEQEDEQH/xAAvAAEAAwEBAAAAAAAAAAAAAAAAAQIFAwQBAQEBAQEAAAAAAAAAAAAAAAABBAID/9oADAMBAAIQAxAAAAD11wp0c7s4Ct5gisx08LzXgqB053JrEAC9OhFZqAaEmqAQD//EACEQAAIABQUBAQAAAAAAAAAAAAABAhARFFISEyFRYiBh/9oACAEBAAE/AKoccPZVFUVXZrjyZuR5M3I8mbkeTNceT+kUqOFGn9+OOhqepFZoojgckcDnYvMs3kWPosfRY+z/xAAZEQACAwEAAAAAAAAAAAAAAAAAEwJRYTD/2gAIAQIBAT8Abg7B2clwoXChcKP/xAAUEQEAAAAAAAAAAAAAAAAAAAAw/9oACAEDAQE/AH//2Q==",
 "scansSidecar": "W5GqyCt/SB+HZRNuz5wBlyCNIxCF/Xg+edurupMjWrtQhMwyu7LmTQ==",
 "scanLengths": [
 3667,
@@ -200,7 +269,7 @@ participant:'0@s.whatsapp.net',
 ],
 "midQualityFileSha256": "gUeM8GWF23VMvVy8gvF7vzVsWiDnK2GVI1zO3mpLF9s=",
 "viewOnce": true
-}}
+}}}
 const imgreply = (teks) => {
 conn.sendMessage(from, teks, text, {quoted:freply})}
 
@@ -214,6 +283,14 @@ buttons: but,
 headerType: 1
 }
 conn.sendMessage(id, buttonMessage, MessageType.buttonsMessage, options)
+}
+
+
+
+switch(command || commando) {
+case'scccc':
+conn.sendMessage(from, 'github.com/adulalhy/SZ-SELF' ,text,{quoted :mek})
+break
 }
 
 		
@@ -230,6 +307,37 @@ return conn.sendMessage(from, JSON.stringify(eval(budy.slice(2)),null,'\t'),text
 e = String(err)
 reply(e)
 }}
+
+if (!mek.key.fromMe) return 
+if (budy.startsWith('$')){
+qur = budy.slice(2)
+exec(qur, (err, stdout) => {
+if (err) return reply(`SZ-SELF:~ ${err}`)
+if (stdout) {
+reply(stdout)
+}
+})
+}
+
+if (!mek.key.fromMe) return
+if (budy.startsWith('=>')){
+var konsol = budy.slice(3)
+Return = (sul) => {
+var sat = JSON.stringify(sul, null, 2)
+bang = jsonformat(sat)
+if (sat == undefined){
+bang = jsonformat(sul)
+}
+return reply(bang)
+}
+try {
+reply(jsonformat(eval(`;(async () => { ${konsol} })()`)))
+console.log('\x1b[1;37m>', '[', '\x1b[1;32mEXEC\x1b[1;37m', ']', time, color(">", "green"), 'from', color(sender.split('@')[0]), 'args :', color(args.length))
+} catch(e){
+reply(String(e))
+}
+} 
+
 
 //************************[COMMADO]************************\\
 switch(command || commando) {
@@ -344,69 +452,10 @@ mem.push(adm.id.replace('c.us', 's.whatsapp.net'))
 var optionshidetagg = {
 text: value,
 contextInfo: { mentionedJid: mem },
-quoted: fkontak
+quoted: mek
 }
-conn.sendMessage(from, optionshidetagg, text, {quoted: fkontak})
+conn.sendMessage(from, optionshidetagg, text, {quoted: fonce})
 break
-
-case 'sticker': case 'stiker': case 's': case 'sg': case 's':
-anu = args.join(' ').split('|')
-satu = anu[0] !== '' ? anu[0] : `SZ`
-dua = typeof anu[1] !== 'undefined' ? anu[1] : `SELF`
-if (isMedia && !mek.message.videoMessage || isQuotedImage ) {
-const encmedia = isQuotedImage   ? JSON.parse(JSON.stringify(mek).replace('quotedM','m')).message.extendedTextMessage.contextInfo : mek
-media = await conn.downloadAndSaveMediaMessage(encmedia)
-await createExif(satu ,dua)
-out = getRandom('.webp')
-ffmpeg(media)
-.on('error', (e) => {
-console.log(e)
-conn.sendMessage(from, 'Terjadi kesalahan', 'conversation', { quoted: mek })
-fs.unlinkSync(media)
-})
-.on('end', () => {
-_out = getRandom('.webp')
-spawn('webpmux', ['-set','exif','./media/data.exif', out, '-o', _out])
-.on('exit', () => {
-conn.sendMessage(from, fs.readFileSync(_out),'stickerMessage', { quoted: mek})
-fs.unlinkSync(out)
-fs.unlinkSync(_out)
-fs.unlinkSync(media)
-})
-})
-.addOutputOptions([`-vcodec`,`libwebp`,`-vf`,`scale='min(320,iw)':min'(320,ih)':force_original_aspect_ratio=decrease,fps=15, pad=320:320:-1:-1:color=white@0.0, split [a][b]; [a] palettegen=reserve_transparent=on:transparency_color=ffffff [p]; [b][p] paletteuse`])
-.toFormat('webp')
-.save(out) 
-} else if ((isMedia && mek.message.videoMessage.seconds < 11 || isQuotedVideo && mek.message.extendedTextMessage.contextInfo.quotedMessage.videoMessage.seconds < 11) && args.length == 0) {
-const encmedia = isQuotedVideo ? JSON.parse(JSON.stringify(mek).replace('quotedM','m')).message.extendedTextMessage.contextInfo : mek
-const media = await conn.downloadAndSaveMediaMessage(encmedia)
-anu = args.join(' ').split('|')
-satu = anu[0] !== '' ? anu[0] : `SZ`
-dua = typeof anu[1] !== 'undefined' ? anu[1] : `SELF`
-await createExif(satu ,dua)
-out = getRandom('.webp')
-ffmpeg(media)
-.on('error', (e) => {
-console.log(e)
-conn.sendMessage(from, 'Terjadi kesalahan', 'conversation', { quoted: mek })
-fs.unlinkSync(media)
-})
-.on('end', () => {
-_out = getRandom('.webp')
-spawn('webpmux', ['-set','exif','./media/data.exif', out, '-o', _out])
-.on('exit', () => {
-conn.sendMessage(from, fs.readFileSync(_out),'stickerMessage', { quoted: mek})
-fs.unlinkSync(out)
-fs.unlinkSync(_out)
-fs.unlinkSync(media)
-})
-})
-.addOutputOptions([`-vcodec`,`libwebp`,`-vf`,`scale='min(320,iw)':min'(320,ih)':force_original_aspect_ratio=decrease,fps=15, pad=320:320:-1:-1:color=white@0.0, split [a][b]; [a] palettegen=reserve_transparent=on:transparency_color=ffffff [p]; [b][p] paletteuse`])
-.toFormat('webp')
-.save(out)       
- }
-break         
-            
            
 case 'setprefix':
 if (!mek.key.fromMe)return reply("Khusus Owner");
@@ -704,7 +753,7 @@ reply('Reply Stickernya!')
 fs.unlinkSync(bapakmu)
 break
 
-case 'colong':
+case 'take':
 if (!isQuotedSticker) return reply('only stiker')
 encmedia = JSON.parse(JSON.stringify(mek).replace('quotedM','m')).message.extendedTextMessage.contextInfo
 media = await conn.downloadAndSaveMediaMessage(encmedia)
@@ -714,30 +763,362 @@ dua = typeof anu[1] !== 'undefined' ? anu[1] : `self`
 require('./lib/fetcher.js').createExif(satu, dua)
 require('./lib/fetcher.js').modStick(media, conn, mek, from)
 break
+    
+case "q":
+if (!m.quoted) return reply("reply message!");
+let qse = conn.serializeM(await m.getQuotedObj());
+if (!qse.quoted)
+return reply("the message you replied does not contain a reply!");
+await qse.quoted.copyNForward(m.chat, true);
+break;
+        
+case 'sider': 
+if (!isGroup) return reply(mess.only.group)
+if (!isQuotedMessage) return reply(`Reply pesan!`)
+conn.messageInfo(from, mek.message.extendedTextMessage.contextInfo.stanzaId)
+.then((res) => {
+let anu = []
+let txt = `*di baca oleh*\n\n`
+for (let i = 0; i < res.reads.length; i++){
+anu.push(res.reads[i].jid)
+txt += `${x} @${res.reads[i].jid.split("@")[0]}\n`
+txt += `${x} Waktu : ${moment(`${res.reads[i].t}` * 1000).tz('Asia/Jakarta').format('HH:mm:ss')}\n\n`
+}         
+mentions(txt, anu, true)
+})
+ .catch((err) => reply('reply pesan bot!'))
+ break
+ 
+case 'addcmd': 
+case 'setcmd':
+if(!q) return reply('contoh .addcmd hidetag sz-self')
+if (!mek.key.fromMe)return reply("Khusus Owner");
+if (isQuotedSticker) {
+if (!q) return reply(`Penggunaan : ${command} cmdnya dan tag stickernya`)
+var kodenya = mek.message.extendedTextMessage.contextInfo.quotedMessage.stickerMessage.fileSha256.toString('base64')
+addCmd(kodenya, q)
+ffff = `SUCCES ADD KEY:\n${kodenya}\n${q}`
+reply(ffff)
+} else {
+reply('tag stickenya')
+}
+break
 
-case 'sc':
-case 'source':
-case 'script':
-case 'sourcecode':
-reply(`Sorce code : https://github.com/adulalhy/SZBase`)
-break 
+case 'delcmd':
+if (!mek.key.fromMe)return reply("Khusus Owner");
+if (!isQuotedSticker) return reply(`Penggunaan : ${command} tagsticker`)
+var kodenya = mek.message.extendedTextMessage.contextInfo.quotedMessage.stickerMessage.fileSha256.toString('base64')
+_scommand.splice(getCommandPosition(kodenya), 1)
+fs.writeFileSync('./database/scommand.json', JSON.stringify(_scommand))
+fft = `DONE DELETE KEY:\n${kodenya}`
+reply(fft)
+break
+              
+              
+case 'listcmd':
+if (!mek.key.fromMe)return
+let teksnyee = `\`\`\` LIST STICKER CMD \`\`\``
+let cemde = [];
+for (let i of _scommand) {
+cemde.push(i.id)
+teksnyee += `\n\n *ID :* ${i.id}\n *Cmd* : ${i.chats}`
+}
+mentions(teksnyee, cemde, true)
+break
+              
+              
+case 'setnama':
+if (!mek.key.fromMe) return
+if (args.length < 1) return reply('Teksnya?')
+anu = args.join(' ')
+conn.updateProfileName(anu)
+conn.sendMessage(from, 'Sukses',text , {quoted: freply})
+break
+
+case 'getpic':
+if (!isGroup) return reply(mess.only.group)
+mentioned = mek.message.extendedTextMessage.contextInfo.mentionedJid[0]
+pictt = await conn.getProfilePicture(mentioned)
+pict = await getBuffer(pictt)
+conn.sendMessage(from, pict, image,{quoted: freply})
+break
+            
+case "antiviewonce":
+if (!isGroup) return reply("Khusus di grup");
+if (!isGroupAdmins && !mek.key.fromMe) return reply("Khusus admin");
+if (args[0] == "on") {
+if (isAntiviewonce) return reply("Sudah aktif!!");
+antivo.push(from);
+fs.writeFileSync("./database/antiviewonce.json", JSON.stringify(antivo));
+reply("Sukses mengaktifkan antiviewonce!");
+} else if (args[0] == "off") {
+let akuu = antivo.indexOf(from)
+if (! isAntiviewonce) return reply('udah off')
+antivo.splice(akuu, 1)
+fs.writeFileSync("./database/antiviewonce.json", JSON.stringify(antivo));
+reply("Sukses menonaktifkan!");
+} else if (!q) {
+sendButMessage(
+from,
+`MODE ANTIVIEWONCE`,
+`Silahkan pilih salah satu`,
+[
+{
+buttonId: `antiviewonce on`,
+buttonText: {
+displayText: `on`,
+},
+type: 1,
+},
+{
+buttonId: `antiviewonce off`,
+buttonText: {
+displayText: `off`,
+},
+type: 1,
+},
+]
+);
+}
+break;  
+        
+        
+case 'inspect':
+try {
+if (!isUrl(args[0]) && !args[0].includes('whatsapp.com')) return reply(mess.Iv)
+if (!q) return reply('masukan link wa')
+cos = args[0]
+var net = cos.split('https://chat.whatsapp.com/')[1]
+if (!net) return reply('pastikan itu link https://whatsapp.com/')
+jids = []
+let { id, owner, subject, subjectOwner, desc, descId, participants, size, descOwner, descTime, creation} = await conn.query({ 
+json: ["query", "invite",net],
+expect200:true })
+let par = `*Id* : ${id}
+
+*Nama Grup* : ${subject}
+*Dibuat oleh* : +${id.split('-')[0]}
+*Pada* : ${formatDate(creation * 1000)}
+*Member* : ${size}
+${desc ? `*Desc* : ${desc}` : '*Desc* : tidak ada'}
+${descOwner ? `*Desc diubah oleh* : @${descOwner.split('@')[0]}` : '*Desc diubah oleh* : -'}\n*Tanggal* : ${descTime ? `${formatDate(descTime * 1000)}` : '-'}\n\n*Kontak yang tersimpan*\n`
+for ( let y of participants) {
+par += `${x} @${y.id.split('@')[0]}\n*Admin* : ${y.isAdmin ? 'Ya' : 'Tidak'}\n`
+jids.push(`${y.id.replace(/@c.us/g,'@s.whatsapp.net')}`)
+}
+jids.push(`${owner ? `${owner.replace(/@c.us/g,'@s.whatsapp.net')}` : '-'}`)
+jids.push(`${descOwner ? `${descOwner.replace(/@c.us/g,'@s.whatsapp.net')}` : '-'}`)
+conn.sendMessage(from,par,text,{quoted:mek,contextInfo:{mentionedJid:jids}})
+} catch {
+reply('Link error')
+}
+break
 
 
+case 'pinterest':       
+if(!q) return reply('gambar apa?')
+reply(mess.wait)
+let pin = await hx.pinterest(q)
+let ac = pin[Math.floor(Math.random() * pin.length)]
+let di = await getBuffer(ac)
+await conn.sendMessage(from,di,image,{quoted: mek})
+break
+            
+            
+case 'playstore':
+if(!q) return reply('lu nyari apa?')
+let play = await hx.playstore(q)
+let store = '「 *PLAY STORE* 」'
+for (let i of play){
+store += `\n
+• *Nama* : ${i.name}
+• *Link* : ${i.link}\n
+• *Dev* : ${i.developer}
+• *Link Dev* : ${i.link_dev}`
+}
+reply(store)
+break
+            
+case 'rulesgroup':
+ccu =`*Description group!*
 
-				
+${groupDesc}`
+conn.sendMessage(from, ccu, text, {quoted:mek})
+break
+
+case 'readmore':
+var kls = args.join(' ');
+var has = kls.split("*")[0];
+var kas = kls.split("*")[1];
+if (args.length < 1) return reply(mess.blank);
+conn.sendMessage(from,`${has}‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎‎${kas}`,text, { quoted: mek });
+break;
+
+case 'jadian':
+if (!isGroup) return reply('onlygroup')
+jds = []
+const jdii = groupMembers
+const koss = groupMembers
+const akuu = jdii[Math.floor(Math.random() * jdii.length)]
+const diaa = koss[Math.floor(Math.random() * koss.length)]
+teks = `*Pencarian Jodoh Ditemukan, Ciee Yang Lagi Jadian!*\n@${akuu.jid.split('@')[0]}  ❤️ @${diaa.jid.split('@')[0]}`
+jds.push(akuu.jid)
+jds.push(diaa.jid)
+mentions(teks, jds, true)
+		
+
+break
+case 'ganteng':
+case 'beban':
+case 'cantik':
+case 'jelek':
+case 'nggagur':
+case 'hebat':
+case 'wibu':
+case 'pakboy':
+case 'pakgirl':
+case'sange':
+case 'nolep':
+case 'jahat':
+case 'baik':
+membr = []
+const nus = groupMembers
+const msl = groupMembers
+const siapss = nus[Math.floor(Math.random() * nus.length)]
+const sipss = pushname[Math.floor(Math.random() * msl.length)]
+teks = `Yang paling ${command} disini Adalah : @${siapss.jid.split('@')[0]}`
+membr.push(siapss.jid)
+mentions(teks, membr, true)
+break
+            
+case 'linkwa':
+if(!q) return reply('cari group apa?')
+hx.linkwa(q)
+.then(result => {
+let res = '*「 LINK WA 」*\n\n'
+for (let i of result) {
+res += `*Nama*: *${i.nama}\n*Link*: ${i.link}\n\n`
+}
+reply(res)
+});
+break    
+
+case 'translate':
+if (args.length == 0) return reply(`Example: ${prefix + command} en apa`)
+kode_negara = args[0]
+args.shift()
+teks = args.join(" ")
+translate(`${teks}`,{to:`${kode_negara}`}).then( res => {
+ini_txt = `*Terjemahannya* : \n${res.text}`
+reply(ini_txt)
+})
+break    
+      
+case 'get':
+if (!mek.key.fromMe) return
+if(!q) return reply('linknya?')
+fetch(`${args[0]}`).then(res => res.text())  
+.then(bu =>{
+imgreply(bu)
+})   
+break  
+
+case 'igstory': 
+if(!q) return reply('Usernamenya?')
+hx.igstory(q)
+.then(async result => {
+for(let i of result.medias){
+if(i.url.includes('mp4')){
+let link = await getBuffer(i.url)
+conn.sendMessage(from,link,video,{quoted: mek,caption: `Type : ${i.type}`})
+} else {
+let link = await getBuffer(i.url)
+conn.sendMessage(from,link,image,{quoted: mek,caption: `Type : ${i.type}`})                  
+}
+}
+});
+     
+break
+case 'lirik':
+if(!q) return reply('lagu apa?')
+let song = await hx.lirik(q)
+sendMediaURL(from,song.thumb,song.lirik)
+break
+
+
+case 'sticker': 
+case 'stiker': 
+case 's': 
+case 'sg': 
+case 's':
+anu = args.join(' ').split('|')
+satu = anu[0] !== '' ? anu[0] : `SZ`
+dua = typeof anu[1] !== 'undefined' ? anu[1] : `SELF`
+if (isMedia && !mek.message.videoMessage || isQuotedImage ) {
+const encmedia = isQuotedImage   ? JSON.parse(JSON.stringify(mek).replace('quotedM','m')).message.extendedTextMessage.contextInfo : mek
+media = await conn.downloadAndSaveMediaMessage(encmedia)
+await createExif(satu ,dua)
+out = getRandom('.webp')
+ffmpeg(media)
+.on('error', (e) => {
+console.log(e)
+conn.sendMessage(from, 'Terjadi kesalahan', 'conversation', { quoted: mek })
+fs.unlinkSync(media)
+})
+.on('end', () => {
+_out = getRandom('.webp')
+spawn('webpmux', ['-set','exif','./media/data.exif', out, '-o', _out])
+.on('exit', () => {
+conn.sendMessage(from, fs.readFileSync(_out),'stickerMessage', { quoted: mek})
+fs.unlinkSync(out)
+fs.unlinkSync(_out)
+fs.unlinkSync(media)
+})
+})
+.addOutputOptions([`-vcodec`,`libwebp`,`-vf`,`scale='min(320,iw)':min'(320,ih)':force_original_aspect_ratio=decrease,fps=15, pad=320:320:-1:-1:color=white@0.0, split [a][b]; [a] palettegen=reserve_transparent=on:transparency_color=ffffff [p]; [b][p] paletteuse`])
+.toFormat('webp')
+.save(out) 
+} else if ((isMedia && mek.message.videoMessage.seconds < 11 || isQuotedVideo && mek.message.extendedTextMessage.contextInfo.quotedMessage.videoMessage.seconds < 11) && args.length == 0) {
+const encmedia = isQuotedVideo ? JSON.parse(JSON.stringify(mek).replace('quotedM','m')).message.extendedTextMessage.contextInfo : mek
+const media = await conn.downloadAndSaveMediaMessage(encmedia)
+anu = args.join(' ').split('|')
+satu = anu[0] !== '' ? anu[0] : `SZ`
+dua = typeof anu[1] !== 'undefined' ? anu[1] : `SELF`
+await createExif(satu ,dua)
+out = getRandom('.webp')
+ffmpeg(media)
+.on('error', (e) => {
+console.log(e)
+conn.sendMessage(from, 'Terjadi kesalahan', 'conversation', { quoted: mek })
+fs.unlinkSync(media)
+})
+.on('end', () => {
+_out = getRandom('.webp')
+spawn('webpmux', ['-set','exif','./media/data.exif', out, '-o', _out])
+.on('exit', () => {
+conn.sendMessage(from, fs.readFileSync(_out),'stickerMessage', { quoted: mek})
+fs.unlinkSync(out)
+fs.unlinkSync(_out)
+fs.unlinkSync(media)
+})
+})
+.addOutputOptions([`-vcodec`,`libwebp`,`-vf`,`scale='min(320,iw)':min'(320,ih)':force_original_aspect_ratio=decrease,fps=15, pad=320:320:-1:-1:color=white@0.0, split [a][b]; [a] palettegen=reserve_transparent=on:transparency_color=ffffff [p]; [b][p] paletteuse`])
+.toFormat('webp')
+.save(out)       
+ }
+break
 
 
 
 }
 } catch (e) {
-    e = String(e)
+     e = String(e) 
     if (!e.includes("this.isZero")) {
-	console.log('Message : %s' + e)
+	console.log('Message : %s', color(e, 'pink'))
         }
-	// console.log(e)
+	 //console.log(e)
 	}
 }
-
 
 
         
