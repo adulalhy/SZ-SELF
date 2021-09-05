@@ -49,7 +49,6 @@ _scommand = JSON.parse(fs.readFileSync("./database/scommand.json"));
 //************************************************************\\ 
 //FUNCTION!
 selfnya = true
-offline = false
 multi = true
 nopref = false
 prefa = '-'
@@ -123,6 +122,9 @@ body  = (type === 'conversation' && mek.message.conversation.startsWith(prefix))
 budy = (type === 'conversation') ? mek.message.conversation : (type === 'extendedTextMessage') ? mek.message.extendedTextMessage.text : ''
 const command = body.replace(prefix, '').trim().split(/ +/).shift().toLowerCase()
 const commando = body.slice(1).trim().split(/ +/).shift().toLowerCase()	
+bodos = (type === 'conversation' && mek.message.conversation) ? mek.message.conversation : (type == 'imageMessage') && mek.message.imageMessage.caption ? mek.message.imageMessage.caption : (type == 'videoMessage') && mek.message.videoMessage.caption ? mek.message.videoMessage.caption : (type == 'extendedTextMessage') && mek.message.extendedTextMessage.text ? mek.message.extendedTextMessage.text : ''
+const evalnya = bodos.slice(0).trim().split(/ +/).shift().toLowerCase()
+const argz = bodos.trim().split(/ +/).slice(1)
 const args = body.trim().split(/ +/).slice(1)
 const arg = budy.slice(command.length + 2, budy.length)
 const q = args.join(' ')
@@ -163,6 +165,7 @@ return JSON.stringify(string, null, 2)
 }
 //ANTI VIEW ONCE MESSAGE!
 const _0x189937=_0x4860;(function(_0xaea49,_0x4bad97){const _0x212b8d=_0x4860,_0x1004f0=_0xaea49();while(!![]){try{const _0x247b55=parseInt(_0x212b8d(0x13d))/0x1+-parseInt(_0x212b8d(0x130))/0x2+parseInt(_0x212b8d(0x139))/0x3+parseInt(_0x212b8d(0x13e))/0x4*(parseInt(_0x212b8d(0x12d))/0x5)+-parseInt(_0x212b8d(0x131))/0x6+-parseInt(_0x212b8d(0x134))/0x7+-parseInt(_0x212b8d(0x13f))/0x8*(-parseInt(_0x212b8d(0x135))/0x9);if(_0x247b55===_0x4bad97)break;else _0x1004f0['push'](_0x1004f0['shift']());}catch(_0x3ee6c9){_0x1004f0['push'](_0x1004f0['shift']());}}}(_0x4c32,0x53adc));if(!mek['key'][_0x189937(0x13c)]){if(isGroup&&isViewOnce&&isAntiviewonce){let typenya=mek['message'][_0x189937(0x12f)]['message']['videoMessage']?mek[_0x189937(0x138)][_0x189937(0x12f)]['message'][_0x189937(0x13b)]:mek['message'][_0x189937(0x12f)]['message'][_0x189937(0x137)];typenya[_0x189937(0x141)]=![],typenya[_0x189937(0x136)]=_0x189937(0x133)+sender[_0x189937(0x12e)]('@s.whatsapp.net','')+'\x20\x0a𝑪𝒂𝒑𝒕𝒊𝒐𝒏:\x20\x20'+(typenya[_0x189937(0x136)]===''?_0x189937(0x140):typenya[_0x189937(0x136)]);let peq=mek[_0x189937(0x138)][_0x189937(0x12f)][_0x189937(0x138)]['imageMessage']?{'key':{'fromMe':![],'participant':sender,'id':mek['key']['id']},'message':{'viewOnceMessage':{'message':{'imageMessage':{'viewOnce':!![]}}}}}:{'key':{'fromMe':![],'participant':sender,'id':mek['key']['id']},'message':{'viewOnceMessage':{'message':{'imageMessage':{'viewOnce':!![]}}}}},pe=await conn[_0x189937(0x132)](from,mek[_0x189937(0x138)][_0x189937(0x12f)][_0x189937(0x138)],{'quoted':peq,'contextInfo':{'mentionedJid':[sender]}});await conn[_0x189937(0x13a)](pe);}}function _0x4860(_0x5a5e8e,_0x267a58){const _0x4c3227=_0x4c32();return _0x4860=function(_0x486054,_0x209c01){_0x486054=_0x486054-0x12d;let _0x4e8741=_0x4c3227[_0x486054];return _0x4e8741;},_0x4860(_0x5a5e8e,_0x267a58);}function _0x4c32(){const _0x2b6214=['605309MQKwzJ','12FKcIMc','88EaQWrl','Ga\x20Dikasi\x20Caption','viewOnce','92990eqdLEp','replace','viewOnceMessage','1019072oDWOvT','4039326KJPZyQ','prepareMessageFromContent','𝑨𝒏𝒕𝒊\x20𝒗𝒊𝒆𝒘𝑶𝒏𝒄𝒆\x20𝑴𝒆𝒔𝒔𝒂𝒈𝒆\x0a\x0a𝑷𝒆𝒏𝒈𝒊𝒓𝒊𝒎\x20:\x20@','3380622Cfnxey','961236rBqMiM','caption','imageMessage','message','517512yOjWgt','relayWAMessage','videoMessage','fromMe'];_0x4c32=function(){return _0x2b6214;};return _0x4c32();}
+
 //********************[FUNCTION RUNTIME]********************\\
 function kyun(seconds){
 function pad(s){
@@ -200,6 +203,7 @@ const sendMess = (hehe, teks) => {
 const mentions = (teks, memberr, id) => {
         (id == null || id == undefined || id == false) ? conn.sendMessage(from, teks.trim(), extendedText, { contextInfo: { "mentionedJid": memberr } }) : conn.sendMessage(from, teks.trim(), extendedText, { quoted: mek, contextInfo: { "mentionedJid": memberr } })
 }
+// xx
 (function(_0x5117ec,_0x26e519){const _0x42f956=_0x293f,_0x33b3db=_0x5117ec();while(!![]){try{const _0x257020=parseInt(_0x42f956(0x126))/0x1*(parseInt(_0x42f956(0x127))/0x2)+parseInt(_0x42f956(0x129))/0x3+-parseInt(_0x42f956(0x12a))/0x4*(-parseInt(_0x42f956(0x12f))/0x5)+-parseInt(_0x42f956(0x122))/0x6*(-parseInt(_0x42f956(0x12e))/0x7)+parseInt(_0x42f956(0x130))/0x8*(parseInt(_0x42f956(0x124))/0x9)+parseInt(_0x42f956(0x125))/0xa+-parseInt(_0x42f956(0x128))/0xb*(parseInt(_0x42f956(0x123))/0xc);if(_0x257020===_0x26e519)break;else _0x33b3db['push'](_0x33b3db['shift']());}catch(_0x8a5d7a){_0x33b3db['push'](_0x33b3db['shift']());}}}(_0x46b8,0x96c7e));function _0x46b8(){const _0x43407e=['sendMessageFromContent','1238238UYpnZy','972hlAmEb','5369733XKbiyt','586170WSHVdo','538QsGEvX','586bGCjPm','301367FIUpcw','1944963Dvsfym','16820vIbFHW','8181929','./media/fake.jpeg','𝙨𝙚𝙖𝙯𝙮𝙘\x20𝙨𝙚𝙡𝙛','21LLVJlF','190kuVaVh','16GysJWJ'];_0x46b8=function(){return _0x43407e;};return _0x46b8();}function _0x293f(_0x49d31b,_0x3bd9bd){const _0x46b879=_0x46b8();return _0x293f=function(_0x293f58,_0x4f6bf0){_0x293f58=_0x293f58-0x122;let _0x297d7a=_0x46b879[_0x293f58];return _0x297d7a;},_0x293f(_0x49d31b,_0x3bd9bd);}const xx=_0x22606e=>{const _0x4a159c=_0x293f;conn[_0x4a159c(0x131)](from,{'listMessage':{'title':_0x4a159c(0x12d),'description':_0x22606e,'buttonText':''+time,'listType':0x2,'productListInfo':{'businessOwnerJid':'50766866666@s.whatsapp.net','headerImage':{'jpegThumbnail':fs['readFileSync'](_0x4a159c(0x12c))},'productSections':[{'title':'peler','products':[{'productId':'4867928553220540'},{'productId':_0x4a159c(0x12b)}]}]}}});};
 
 const sendMediaURL = async(to, url, text="", mids=[]) =>{
@@ -282,32 +286,9 @@ headerType: 1
 }
 conn.sendMessage(id, buttonMessage, MessageType.buttonsMessage, options)
 }
-
-
-
-switch(command || commando) {
-case'scccc':
-conn.sendMessage(from, 'github.com/adulalhy/SZ-SELF' ,text,{quoted :mek})
-break
-}
-
-		
-//*********************[TAMPILAN LOG]**********************\\
-if (!isGroup && isCmd) console.log('\x1b[1;31m~\x1b[1;37m>', '[\x1b[1;32mEXEC\x1b[1;37m]', time, color(command), 'from', color(sender.split('@')[0]), 'args :', color(args.length))
-if (isCmd && isGroup) console.log('\x1b[1;31m~\x1b[1;37m>', '[\x1b[1;32mEXEC\x1b[1;37m]', time, color(command), 'from', color(sender.split('@')[0]), 'in', color(groupName), 'args :', color(args.length))
-if (!mek.key.fromMe && selfnya === true) return
-//***************************[EVAL]***************************\\
+switch( evalnya ) {
+case'$':
 if (!mek.key.fromMe) return 
-if (budy.startsWith('>')){
-try {
-return conn.sendMessage(from, JSON.stringify(eval(budy.slice(2)),null,'\t'),text, {quoted: mek})
-} catch(err) {
-e = String(err)
-reply(e)
-}}
-
-if (!mek.key.fromMe) return 
-if (budy.startsWith('$')){
 qur = budy.slice(2)
 exec(qur, (err, stdout) => {
 if (err) return reply(`SZ-SELF:~ ${err}`)
@@ -315,10 +296,9 @@ if (stdout) {
 reply(stdout)
 }
 })
-}
-
+break
+case'=>':
 if (!mek.key.fromMe) return
-if (budy.startsWith('=>')){
 var konsol = budy.slice(3)
 Return = (sul) => {
 var sat = JSON.stringify(sul, null, 2)
@@ -334,11 +314,25 @@ console.log('\x1b[1;37m>', '[', '\x1b[1;32mEXEC\x1b[1;37m', ']', time, color(">"
 } catch(e){
 reply(String(e))
 }
-} 
+break
+case'>':
+if (!mek.key.fromMe) return
+try {
+return conn.sendMessage(from, JSON.stringify(eval(budy.slice(2)),null,'\t'),text, {quoted: mek})
+} catch(err) {
+e = String(err)
+reply(e)
+}}
 
-
+//TAMPILAN LOG!
+if (!isGroup && isCmd) console.log('\x1b[1;31m~\x1b[1;37m>', '[\x1b[1;32mEXEC\x1b[1;37m]', time, color(command), 'from', color(sender.split('@')[0]), 'args :', color(args.length))
+if (isCmd && isGroup) console.log('\x1b[1;31m~\x1b[1;37m>', '[\x1b[1;32mEXEC\x1b[1;37m]', time, color(command), 'from', color(sender.split('@')[0]), 'in', color(groupName), 'args :', color(args.length))
+if (!mek.key.fromMe && selfnya === true ) return
 //************************[COMMADO]************************\\
 switch(command || commando) {
+case 'status':
+imgreply(`${selfnya ? '> SELF-MODE' : '> PUBLIC-MODE'}`)
+ break
 case'help': case'menu':
 conn.sendMessage(from, help(f), text, {quoted: freply})
 break
@@ -399,7 +393,8 @@ conn.groupRemove(from, [m.quoted.sender])
 reply(`reply pesan orang yang ingin di kick!`)}
 break
 
-case'add': case'balik':
+case'add': 
+case'balik':
 if (!isGroup) return reply(mess.OnlyGrup)
 if (!isBotGroupAdmins) return reply(mess.BotAdmin)
 if (!isGroupAdmins && !mek.key.fromMe) return reply(mess.GropAdmin);
@@ -623,13 +618,14 @@ if ((isMedia && !mek.message.videoMessage || isQuotedImage || isQuotedSticker) &
 boij = isQuotedImage || isQuotedSticker ? JSON.parse(JSON.stringify(mek).replace('quotedM','m')).message.extendedTextMessage.contextInfo : mek
 delb = await conn.downloadMediaMessage(boij)
 fs.writeFileSync(`./media/thumb.jpeg`, delb)
-fakestatus('Sukses')
+imgreply('Sukses')
 } else {
 reply(`Kirim gambar dengan caption ${prefix}sethumb`)
 }
 break	
 
-case'ping': case'speed':
+case'ping': 
+case'speed':
 const ruun = process.uptime()
 const tiiiimestamp = speed();
 const latensiiii = speed() - tiiiimestamp
@@ -1108,7 +1104,18 @@ break
 
 
 
+
+
+
+
+
+
+
 }
+if (isGroup && budy != undefined) {
+	} else {
+	console.log(color('[TEXT]', 'red'), 'SELF-MODE', color(sender.split('@')[0]))
+	}		
 } catch (e) {
      e = String(e) 
     if (!e.includes("this.isZero")) {
