@@ -51,7 +51,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/adulalhy/SZBase.git"
+    "url": "git+https://github.com/adulalhy/SZ-SELF.git"
   },
   "keywords": [
     "Wasu"
@@ -59,7 +59,7 @@
   "author": "SEAZYC",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/adulalhy/SZBase/issues"
+    "url": "https://github.com/adulalhy/SZ-SELF/issues"
   },
   "homepage": "https://github.com/adulalhy"
 }
