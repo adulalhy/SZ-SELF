@@ -68,6 +68,7 @@
 * `Tagall`
 
 ### Other
+* `Antiviewonce`
 * `sharelock`
 * `Detikvn`
 * `Detikvideo`
