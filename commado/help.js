@@ -50,7 +50,7 @@ const help = (f) => {
 ┃${f}linkwa
 ┃${f}translate
 ┃${f}rulesgroup
-┃${f}ig story
+┃${f}igstory
 ┃${f}lirik
 ┗⬣
 
