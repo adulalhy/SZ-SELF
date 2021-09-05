@@ -36,10 +36,18 @@
 * `Self`
 * `Public`
 * `[ > ]Eval`
+* `[ => ] Eval async`
 * `Term`
 * `Setthumb`
 * `Broadcast`
 * `Leave`
+* `Take`
+* `q`
+* `Get`
+* `Setnama`
+* `Setcmd`
+* `Delcmd`
+* `Listcmd`
 
 ### Maker
 * `Sticker`
@@ -50,6 +58,8 @@
 * `IG Download`
 * `FB Download`
 * `YT Play`
+* `IGstory`
+* `Playstore`
 
 ### Grup
 * `Hidetag`
@@ -60,6 +70,13 @@
 * `sharelock`
 * `Detikvn`
 * `Detikvideo`
+* `Pinterst`
+* `Lirik`
+* `Translate`
+* `Getpic`
+* `inspect`
+* `Linkwa`
+* `Sider`
 
 ### fun
 * `readmore`
