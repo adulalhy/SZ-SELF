@@ -495,7 +495,6 @@ break
 case 'self':
 if (!mek.key.fromMe) return 
 if (selfnya === true) return
-uptime = process.uptime()
 selfnya = true
 imgreply("*SELF MODE!*")
 break
