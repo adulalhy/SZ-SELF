@@ -1101,7 +1101,28 @@ fs.unlinkSync(media)
 .save(out)       
  }
 break
-
+case 'mode':
+sendButMessage(
+from,
+`STATUS MODE BOT`,
+`Silahkan pilih salah satu`,
+ [
+ {
+buttonId: `self`,
+buttonText: {
+displayText: `SELF MODE`,
+},
+type: 1,
+},
+{
+buttonId: `public`,
+buttonText: {
+displayText: `PUBLIC MODE`,
+},
+type: 1,
+},
+])
+break
 
 
 
